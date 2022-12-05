@@ -17,7 +17,8 @@ const remove = async () => {
       if (err) errorShow();
       else {
         await fs.unlink(filePath, (err) => {
-          console.log('error occurred');
+          if (err) console.log('error occurred');
+          else console.log('file was deleted');
         });
       }
     });
