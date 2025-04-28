@@ -2,19 +2,23 @@ import path from "path";
 import { release, version } from "os";
 import { createServer as createServerHttp } from "http";
 import "./files/c.js";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+import { readFile } from "fs/promises";
 
 const random = Math.random();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 let unknownObject;
 
 if (random > 0.5) {
-	unknownObject = await import("./files/a.json", {
-		assert: { type: "json" },
-	}).then((module) => module.default);
+	const filePath = path.join(__dirname, "files", "a.json");
+	unknownObject = JSON.parse(await readFile(filePath, "utf8"));
 } else {
-	unknownObject = await import("./files/b.json", {
-		assert: { type: "json" },
-	}).then((module) => module.default);
+	const filePath = path.join(__dirname, "files", "b.json");
+	unknownObject = JSON.parse(await readFile(filePath, "utf8"));
 }
 
 console.log(`Release ${release()}`);
